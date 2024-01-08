@@ -1,4 +1,4 @@
-package compute
+package models
 
 type Query struct {
 	command   string

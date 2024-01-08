@@ -1,27 +1,30 @@
 package compute
 
-import "github.com/Arkosh744/go-buddy-db/pkg/tests"
+import (
+	"github.com/Arkosh744/go-buddy-db/pkg/models"
+	"github.com/Arkosh744/go-buddy-db/pkg/tests"
+)
 
 func (s *Suite) TestParser_ParseQuery() {
 	testCases := []tests.TestCase{
 		{
 			Name: "Error - Empty query",
 			ActAndAssert: func() {
-				s.parser.EXPECT().ParseQuery("").Return(nil, errEmptyQuery)
+				s.parser.EXPECT().ParseQuery("").Return(nil, models.ErrEmptyQuery)
 
 				_, err := s.parser.ParseQuery("")
 				s.Require().Error(err)
-				s.Require().ErrorIs(err, errEmptyQuery)
+				s.Require().ErrorIs(err, models.ErrEmptyQuery)
 			},
 		},
 		{
 			Name: "Error - Unknown character",
 			ActAndAssert: func() {
-				s.parser.EXPECT().ParseQuery("GET $").Return(nil, errUnknownCharacter)
+				s.parser.EXPECT().ParseQuery("GET $").Return(nil, models.ErrUnknownCharacter)
 
 				_, err := s.parser.ParseQuery("GET $")
 				s.Require().Error(err)
-				s.Require().ErrorIs(err, errUnknownCharacter)
+				s.Require().ErrorIs(err, models.ErrUnknownCharacter)
 			},
 		},
 		{

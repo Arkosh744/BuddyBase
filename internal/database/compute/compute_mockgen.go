@@ -7,6 +7,7 @@ package compute
 import (
 	reflect "reflect"
 
+	models "github.com/Arkosh744/go-buddy-db/pkg/models"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -72,10 +73,10 @@ func (m *Mockanalyzer) EXPECT() *MockanalyzerMockRecorder {
 }
 
 // AnalyzeQuery mocks base method.
-func (m *Mockanalyzer) AnalyzeQuery(tokens []string) (Query, error) {
+func (m *Mockanalyzer) AnalyzeQuery(tokens []string) (models.Query, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AnalyzeQuery", tokens)
-	ret0, _ := ret[0].(Query)
+	ret0, _ := ret[0].(models.Query)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

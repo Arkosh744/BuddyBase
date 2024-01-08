@@ -4,6 +4,8 @@ import (
 	"errors"
 	"strings"
 	"unicode"
+
+	"github.com/Arkosh744/go-buddy-db/pkg/models"
 )
 
 const (
@@ -13,8 +15,6 @@ const (
 )
 
 var (
-	errEmptyQuery         = errors.New("empty query")
-	errUnknownCharacter   = errors.New("unknown character")
 	errNotValidTransition = errors.New("not valid transition")
 )
 
@@ -44,7 +44,7 @@ func NewParser() *Parser {
 
 func (p *Parser) ParseQuery(query string) ([]string, error) {
 	if len(query) == 0 {
-		return nil, errEmptyQuery
+		return nil, models.ErrEmptyQuery
 	}
 
 	var state int
@@ -80,7 +80,7 @@ func getCharType(ch rune) (int, error) {
 		return whiteSpaceFoundState, nil
 	}
 
-	return 0, errUnknownCharacter
+	return 0, models.ErrUnknownCharacter
 }
 
 func handleCharFound(ch rune, stringBuffer *strings.Builder, tokens []string) ([]string, int) {

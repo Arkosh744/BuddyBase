@@ -6,12 +6,9 @@ import (
 	"errors"
 	"fmt"
 
-	"go.uber.org/zap"
-)
+	"github.com/Arkosh744/go-buddy-db/pkg/models"
 
-var (
-	errInvalidCommand          = errors.New("invalid command")
-	errInvalidCommandArguments = errors.New("invalid command arguments")
+	"go.uber.org/zap"
 )
 
 type parser interface {
@@ -19,7 +16,7 @@ type parser interface {
 }
 
 type analyzer interface {
-	AnalyzeQuery(tokens []string) (Query, error)
+	AnalyzeQuery(tokens []string) (models.Query, error)
 }
 
 type Compute struct {
@@ -48,15 +45,15 @@ func NewCompute(parser parser, analyzer analyzer, logger *zap.Logger) (*Compute,
 	}, nil
 }
 
-func (c *Compute) HandleQuery(_ context.Context, queryStr string) (Query, error) {
+func (c *Compute) HandleQuery(_ context.Context, queryStr string) (models.Query, error) {
 	tokens, err := c.parser.ParseQuery(queryStr)
 	if err != nil {
-		return Query{}, fmt.Errorf("parse: %w", err)
+		return models.Query{}, fmt.Errorf("parse: %w", err)
 	}
 
 	query, err := c.analyzer.AnalyzeQuery(tokens)
 	if err != nil {
-		return Query{}, fmt.Errorf("analyze: %w", err)
+		return models.Query{}, fmt.Errorf("analyze: %w", err)
 	}
 
 	return query, nil
