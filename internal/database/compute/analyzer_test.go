@@ -6,7 +6,6 @@ import (
 )
 
 func (s *Suite) TestAnalyzer_AnalyzeQuery() {
-
 	testCases := []tests.TestCase{
 		{
 			Name: "Error - GET w/o args",

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/Arkosh744/go-buddy-db/pkg/models"
-
 	"github.com/Arkosh744/go-buddy-db/pkg/tests"
 )
 

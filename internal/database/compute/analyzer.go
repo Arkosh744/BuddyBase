@@ -8,9 +8,7 @@ import (
 	"github.com/samber/lo"
 )
 
-var (
-	errNotEnoughtTokens = errors.New("not enough tokens provided")
-)
+var errNotEnoughtTokens = errors.New("not enough tokens provided")
 
 type Analyzer struct{}
 

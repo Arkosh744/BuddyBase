@@ -7,7 +7,6 @@ import (
 	"fmt"
 
 	"github.com/Arkosh744/go-buddy-db/pkg/models"
-
 	"go.uber.org/zap"
 )
 

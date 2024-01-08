@@ -14,13 +14,11 @@ const (
 	whiteSpaceFoundState
 )
 
-var (
-	errNotValidTransition = errors.New("not valid transition")
-)
+var errNotValidTransition = errors.New("not valid transition")
 
 type transitionAction func(ch rune, stringBuffer *strings.Builder, tokens []string) ([]string, int)
 
-// transition[fromState][ToState]
+// transition[fromState][ToState].
 var transitions = map[int]map[int]transitionAction{
 	initialState: {
 		charFoundState:       handleCharFound,
