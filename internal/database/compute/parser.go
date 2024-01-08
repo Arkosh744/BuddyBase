@@ -48,8 +48,8 @@ func (p *Parser) ParseQuery(query string) ([]string, error) {
 	}
 
 	var state int
-	var stringBuffer *strings.Builder
 	var tokens []string
+	stringBuffer := &strings.Builder{}
 
 	for _, ch := range query {
 		toState, err := getCharType(ch)

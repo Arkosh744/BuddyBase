@@ -6,28 +6,36 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Arkosh744/go-buddy-db/internal/database"
+	"github.com/Arkosh744/go-buddy-db/internal/database/compute"
+	"github.com/Arkosh744/go-buddy-db/internal/database/storage"
+	"github.com/Arkosh744/go-buddy-db/internal/database/storage/mem"
 	"go.uber.org/zap"
 )
 
 func main() {
 	ctx := context.Background()
-	logger, err := zap.NewProduction()
+	log, err := zap.NewProduction()
 	if err != nil {
 		panic(err)
 	}
 
-	parser, err := cmpt.NewParser(logger)
-	analyzer, err := cmpt.NewAnalyzer(logger)
-	storage := strg.NewStorage()
-
-	compute, err := cmpt.NewCompute(parser, analyzer, logger)
-
-	database, err := db.NewDatabase(compute, storage, logger)
+	computeLayer, err := compute.NewCompute(compute.NewParser(), compute.NewAnalyzer(), log)
 	if err != nil {
-		logger.Fatal("cannot start database", zap.Error(err))
+		log.Fatal("cannot start compute layer", zap.Error(err))
 	}
 
-	logger.Info("database app started")
+	storageLayer, err := storage.NewStorage(mem.NewEngine(), log)
+	if err != nil {
+		log.Fatal("cannot start storage layer", zap.Error(err))
+	}
+
+	databaseLayer, err := database.NewDatabase(computeLayer, storageLayer, log)
+	if err != nil {
+		log.Fatal("cannot start database layer", zap.Error(err))
+	}
+
+	log.Info("database app started")
 
 	for {
 		fmt.Print("enter a command: ")
@@ -35,20 +43,20 @@ func main() {
 		scanner.Scan()
 
 		if err = scanner.Err(); err != nil {
-			logger.Fatal("scanner")
+			log.Fatal("scanner")
 		}
 		input := scanner.Text()
 
 		switch input {
-		case "stop":
-			logger.Info("database app terminated")
+		case "stop", "exit", "quit":
+			fmt.Println("database app terminated")
 			return
 		case "":
 			fmt.Println("nothing provided")
 			continue
 		}
 
-		resp, err := database.HandleQuery(ctx, input)
+		resp, err := databaseLayer.HandleQuery(ctx, input)
 		if err != nil {
 			fmt.Println(err.Error())
 		}

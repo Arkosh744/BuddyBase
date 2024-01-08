@@ -27,13 +27,13 @@ type StorageLayer interface {
 }
 
 type Database struct {
-	computer ComputeLayer
-	storage  StorageLayer
-	log      *zap.Logger
+	compute ComputeLayer
+	storage StorageLayer
+	log     *zap.Logger
 }
 
-func NewDatabase(computer ComputeLayer, storage StorageLayer, log *zap.Logger) (*Database, error) {
-	if computer == nil {
+func NewDatabase(compute ComputeLayer, storage StorageLayer, log *zap.Logger) (*Database, error) {
+	if compute == nil {
 		return nil, ErrComputeNotProvided
 	}
 
@@ -46,16 +46,16 @@ func NewDatabase(computer ComputeLayer, storage StorageLayer, log *zap.Logger) (
 	}
 
 	return &Database{
-		computer: computer,
-		storage:  storage,
-		log:      log,
+		compute: compute,
+		storage: storage,
+		log:     log,
 	}, nil
 }
 
 func (d *Database) HandleQuery(ctx context.Context, queryStr string) (string, error) {
 	d.log.Info("handling query", zap.String("query", queryStr))
 
-	query, err := d.computer.HandleQuery(ctx, queryStr)
+	query, err := d.compute.HandleQuery(ctx, queryStr)
 	if err != nil {
 		return "", err
 	}
