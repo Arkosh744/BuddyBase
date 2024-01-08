@@ -1,0 +1,27 @@
+name: lint
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ '*' ]
+
+permissions:
+  contents: read
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '1.21'
+
+      - name: lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: latest
